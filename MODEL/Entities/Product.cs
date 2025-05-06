@@ -19,5 +19,6 @@ public class Product:Common
     public decimal Price { get; set; }
     public decimal Cost { get; set; }
     public decimal Profit => Price - Cost;
+    public string? image { get; set; }
 
 }

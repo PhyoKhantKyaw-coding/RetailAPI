@@ -262,5 +262,30 @@ internal class UserService : IUserService
         message = "Email verified successfully.";
         return message;
     }
+    public async Task<UserResponseDTO> ResentOTP(string email)
+    {
+        UserResponseDTO model = new UserResponseDTO();
+        var user = (await _unitOfWork.Users.GetByCondition(x => x.Email == email && x.Status == "N")).FirstOrDefault();
+        if (user == null)
+        {
+            model.IsSuccess = false;
+            model.Message = "User not found or already verified.";
+            return model;
+        }
+        var otpCode = GenerateOTP();
+        user.OTP = otpCode;
+        user.OTP_Exp = DateTime.Now.AddMinutes(5);
+        await _unitOfWork.SaveChangesAsync();
+        bool emailSent = SendOTPEmail(user.Email, user.Name, otpCode);
+        if (!emailSent)
+        {
+            model.IsSuccess = false;
+            model.Message = "Failed to send OTP email.";
+            return model;
+        }
+        model.IsSuccess = true;
+        model.Message = "New OTP sent to email.";
+        return model;
+    }
 
 }

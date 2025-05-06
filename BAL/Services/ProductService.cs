@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BAL.IServices;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata;
 using MODEL.DTOs;
 using MODEL.Entities;
@@ -16,17 +18,43 @@ internal class ProductService: IProductService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-    public ProductService(IUnitOfWork unitOfWork,IMapper mapper)
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    public ProductService(IUnitOfWork unitOfWork,IMapper mapper, IWebHostEnvironment webHostEnvironment)
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _webHostEnvironment = webHostEnvironment;
     }
-    public async Task AddProduct(AddProductDTO product)
+    public async Task AddProduct(AddProductDTO product, IFormFile? imageFile)
     {
         if (product == null)
         {
             throw new ArgumentNullException(nameof(product), "Product must not be null");
         }
+
+        string? imagePath = null;
+
+        if (imageFile != null && imageFile.Length > 0)
+        {
+            if (_webHostEnvironment.WebRootPath == null)
+            {
+                _webHostEnvironment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            }
+
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            Directory.CreateDirectory(uploadsFolder);
+
+            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+
+            imagePath = "/images/" + uniqueFileName;
+        }
+
         var productEntity = new Product
         {
             ProductId = Guid.NewGuid(),
@@ -35,12 +63,15 @@ internal class ProductService: IProductService
             Cost = product.Cost,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            ActiveFlag = true
+            ActiveFlag = true,
+            image = imagePath // Assuming your Product entity has this field
         };
+
         await _unitOfWork.Products.Add(productEntity);
         await _unitOfWork.SaveChangesAsync();
     }
-    public async Task UpdateProduct(UpdateProductDTO product)
+
+    public async Task UpdateProduct(UpdateProductDTO product, IFormFile? imageFile)
     {
         if (product == null)
         {
@@ -73,10 +104,33 @@ internal class ProductService: IProductService
             productEntity.Cost = product.Cost;
         }
 
+        // If a new image is uploaded, replace the current image path
+        if (imageFile != null && imageFile.Length > 0)
+        {
+            if (_webHostEnvironment.WebRootPath == null)
+            {
+                _webHostEnvironment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            }
+
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            Directory.CreateDirectory(uploadsFolder);
+
+            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+
+            productEntity.image = "/images/" + uniqueFileName;
+        }
+
         productEntity.UpdatedAt = DateTime.UtcNow;
         _unitOfWork.Products.Update(productEntity);
         await _unitOfWork.SaveChangesAsync();
     }
+
     public async Task UpdateProduct1(UpdateProductDTO product)
     {
         if (product == null)

@@ -67,7 +67,7 @@ internal class SaleService: ISaleService
                 {
                     return new ResponseModel
                     {
-                        Message = $"Insufficient stock for product ID: {detailDto.ProductId}. Available: {product.Stock}, Requested: {detailDto.Quantity}",
+                        Message = $"Insufficient stock for product ID: {detailDto.ProductId}. Requested: {detailDto.Quantity}",
                         Status = APIStatus.Error
                     };
                 }

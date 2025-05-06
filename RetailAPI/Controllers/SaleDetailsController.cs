@@ -8,7 +8,7 @@ using MODEL.Entities;
 using REPOSITORY.UnitOfWork;
 
 namespace RetailAPI.Controllers;
-[Authorize(Roles = "Admin,User")]
+
 [Produces("application/json")]
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
@@ -20,12 +20,27 @@ public class SaleDetailsController : ControllerBase
     {
         _unitOfWork = unitOfWork;
     }
+    [Authorize(Roles = "Admin,User")]
     [HttpGet("GetAllSalesDatail")]
     public async Task<IActionResult> GetAllSalesDatail()
     {
         try
         {
             var sales = await _unitOfWork.SaleDetail.GetAll();
+            return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful, Data = sales });
+        }
+        catch (Exception ex)
+        {
+            return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
+        }
+    }
+    [Authorize(Roles = "Admin")]
+    [HttpGet("GetSaleDetailBySaleId")]
+    public async Task<IActionResult> GetSaleDetailBySaleId(Guid saleId)
+    {
+        try
+        {
+            var sales = await _unitOfWork.SaleDetail.GetByCondition(x => x.SaleId == saleId);
             return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful, Data = sales });
         }
         catch (Exception ex)

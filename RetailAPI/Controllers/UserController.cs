@@ -38,6 +38,7 @@ public class UserController : ControllerBase
             return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
         }
     }
+    [Authorize(Roles = "Admin,User")]
     [HttpPatch("update")]
     public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO dto)
     {
@@ -73,6 +74,7 @@ public class UserController : ControllerBase
             return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
         }
     }
+    [Authorize(Roles = "Admin")]
     [HttpGet("GetUserbyId")]
     public async Task<IActionResult> GetUserbyId([FromQuery] Guid userId)
     {
@@ -86,6 +88,7 @@ public class UserController : ControllerBase
             return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
         }
     }
+    [Authorize(Roles = "Admin")]
     [HttpGet("GetAllUsers")]
     public async Task<IActionResult> GetAllUsers()
     {
@@ -93,6 +96,23 @@ public class UserController : ControllerBase
         {
             var users = await _unitOfWork.Users.GetAll();
             return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful, Data = users });
+        }
+        catch (Exception ex)
+        {
+            return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
+        }
+    }
+    [HttpPost("ResentOTP")]
+    public async Task<IActionResult> ResentOTP([FromQuery] string email)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email must not be null or empty");
+            }
+            var result = await _userService.ResentOTP(email);
+            return Ok(new ResponseModel { Message = result.Message, Status = APIStatus.Successful });
         }
         catch (Exception ex)
         {

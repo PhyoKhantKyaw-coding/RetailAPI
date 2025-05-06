@@ -22,7 +22,7 @@ namespace RetailAPI.Controllers
             _unitOfWork = unitOfWork;
             _productService = productService;
         }
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin")]
         [HttpPatch("UpdateProduct")]
         public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDTO product)
         {

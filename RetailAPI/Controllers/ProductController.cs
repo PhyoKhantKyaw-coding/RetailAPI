@@ -54,12 +54,12 @@ public class ProductController : ControllerBase
     }
     [Authorize(Roles = "Admin")]
     [HttpPost("AddProduct")]
-    public async Task<IActionResult> AddProduct([FromBody] AddProductDTO product)
+    public async Task<IActionResult> AddProduct([FromForm] AddProductDTO product, IFormFile? imageFile)
     {
         try
         {
-            await _productService.AddProduct(product);
-            return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful });
+            await _productService.AddProduct(product, imageFile);
+            return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful});
         }
         catch (Exception ex)
         {
@@ -69,12 +69,25 @@ public class ProductController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPatch("UpdateProduct")]
-    public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDTO product)
+    public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDTO product, IFormFile? imageFile)
     {
         try
         {
             await _productService.UpdateProduct(product);
             return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful });
+        }
+        catch (Exception ex)
+        {
+            return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
+        }
+    }
+    [HttpGet("GetProductWithPaginationId")]
+    public async Task<IActionResult> GetProductWithPaginationId([FromQuery] PaginationDTO pagination)
+    {
+        try
+        {
+            var products = await _unitOfWork.Products.GetAllAsyncWithPagination(pagination.page, pagination.pageSize);
+            return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful, Data = products });
         }
         catch (Exception ex)
         {

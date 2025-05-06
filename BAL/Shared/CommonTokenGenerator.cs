@@ -31,7 +31,7 @@ public class CommonTokenGenerator(IConfiguration configuration)
     //        SigningCredentials = credentials,
     //        Issuer = configuration["Jwt:Issuer"],
     //        Audience = configuration["Jwt:Audience"],
-    //    };
+    //    }; 
 
     //    var handler = new JsonWebTokenHandler();
     //    string token = handler.CreateToken(tokenDescriptor);

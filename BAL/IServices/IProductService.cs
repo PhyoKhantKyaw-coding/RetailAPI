@@ -1,4 +1,5 @@
-﻿using MODEL.DTOs;
+﻿using Microsoft.AspNetCore.Http;
+using MODEL.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace BAL.IServices;
 
 public interface IProductService
 {
-    Task AddProduct(AddProductDTO product);
+    Task AddProduct(AddProductDTO product, IFormFile? imageFile);
     Task UpdateProduct(UpdateProductDTO product);
     Task UpdateProduct1(UpdateProductDTO product);
 }
