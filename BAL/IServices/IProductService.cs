@@ -11,6 +11,6 @@ namespace BAL.IServices;
 public interface IProductService
 {
     Task AddProduct(AddProductDTO product, IFormFile? imageFile);
-    Task UpdateProduct(UpdateProductDTO product);
+    Task UpdateProduct(UpdateProductDTO product, IFormFile? imageFile);
     Task UpdateProduct1(UpdateProductDTO product);
 }

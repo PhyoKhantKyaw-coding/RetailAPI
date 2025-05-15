@@ -10,6 +10,7 @@ using MODEL.Entities;
 using REPOSITORY.Repositories.IRepositories;
 using REPOSITORY.Repositories.Repositories;
 using System.Reflection.Metadata;
+using Microsoft.Identity.Client;
 
 namespace REPOSITORY.UnitOfWork;
 
@@ -25,9 +26,11 @@ public class UnitOfWork : IUnitOfWork
         Sales = new SaleRepository(_dataContext);
         Roles = new RoleRepository(_dataContext);
         Users = new UserRepository(_dataContext);
+        Categorys = new CategoryRepository(_dataContext);
     }
 
     public AppSettings AppSettings { get; private set; }
+    public ICategoryRepository Categorys { get; private set; }
     public ISaleDetailsRepository SaleDetail { get; private set; }
     public IProductRepository Products { get; private set; }
     public ISaleRepository Sales { get; private set; }

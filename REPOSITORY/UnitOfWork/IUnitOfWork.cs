@@ -15,6 +15,7 @@ public interface IUnitOfWork : IDisposable
     ISaleRepository Sales { get; }
     IRoleRepository Roles { get; }
     IUserRepository Users { get; }
+    ICategoryRepository Categorys { get; }
     AppSettings AppSettings { get; }
     Task<int> SaveChangesAsync();
 }

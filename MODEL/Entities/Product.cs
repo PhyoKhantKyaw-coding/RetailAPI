@@ -20,5 +20,7 @@ public class Product:Common
     public decimal Cost { get; set; }
     public decimal Profit => Price - Cost;
     public string? image { get; set; }
+    public Guid CategoryId { get; set; }
+    public string Description { get; set; }
 
 }

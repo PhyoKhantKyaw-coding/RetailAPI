@@ -64,7 +64,9 @@ internal class ProductService: IProductService
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             ActiveFlag = true,
-            image = imagePath // Assuming your Product entity has this field
+            CategoryId = product.CategoryId,
+            Description = product.Description,
+            image = imagePath 
         };
 
         await _unitOfWork.Products.Add(productEntity);
@@ -102,6 +104,8 @@ internal class ProductService: IProductService
         if (product.Cost > 0)
         {
             productEntity.Cost = product.Cost;
+            productEntity.CategoryId = product.CategoryId;
+            productEntity.Description = product.Description;
         }
 
         // If a new image is uploaded, replace the current image path
@@ -130,6 +134,8 @@ internal class ProductService: IProductService
         _unitOfWork.Products.Update(productEntity);
         await _unitOfWork.SaveChangesAsync();
     }
+
+
 
     public async Task UpdateProduct1(UpdateProductDTO product)
     {

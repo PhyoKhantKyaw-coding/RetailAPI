@@ -36,7 +36,7 @@ namespace RetailAPI.Controllers
                 {
                     return Ok(new ResponseModel { Message = "Your password is invalid!", Status = APIStatus.Error });
                 }
-                return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful, Data = returndata });
+                return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful, Data = returndata.Token });
             }
             catch (Exception ex)
             {

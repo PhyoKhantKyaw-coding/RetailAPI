@@ -46,7 +46,8 @@ public class CommonTokenGenerator(IConfiguration configuration)
         var claims = new[]
         {
         new Claim(ClaimTypes.Email, user.Email),
-        new Claim(ClaimTypes.Role, userRole) // Add role claim
+        new Claim(ClaimTypes.Role, userRole),
+        new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString())
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor

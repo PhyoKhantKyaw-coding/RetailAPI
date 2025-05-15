@@ -24,7 +24,7 @@ public class ProductController : ControllerBase
         _unitOfWork = unitOfWork;
         _productService = productService;
     }
-    [Authorize(Roles = "Admin,User")]
+   // [Authorize(Roles = "Admin,User")]
     [HttpGet("GetAllProducts")]
     public async Task<IActionResult> GetAllProducts()
     {
@@ -38,7 +38,7 @@ public class ProductController : ControllerBase
             return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
         }
     }
-    [Authorize(Roles = "Admin")]
+   // [Authorize(Roles = "Admin")]
     [HttpGet("GetProductById")]
     public async Task<IActionResult> GetProduct(Guid id)
     {
@@ -52,7 +52,7 @@ public class ProductController : ControllerBase
             return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
         }
     }
-    [Authorize(Roles = "Admin")]
+   // [Authorize(Roles = "Admin")]
     [HttpPost("AddProduct")]
     public async Task<IActionResult> AddProduct([FromForm] AddProductDTO product, IFormFile? imageFile)
     {
@@ -67,13 +67,13 @@ public class ProductController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
+  //  [Authorize(Roles = "Admin")]
     [HttpPatch("UpdateProduct")]
     public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDTO product, IFormFile? imageFile)
     {
         try
         {
-            await _productService.UpdateProduct(product);
+            await _productService.UpdateProduct(product,imageFile);
             return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful });
         }
         catch (Exception ex)

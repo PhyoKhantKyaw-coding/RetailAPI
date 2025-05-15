@@ -72,7 +72,7 @@ internal class SaleService: ISaleService
                     };
                 }
 
-                var detailTotalPrice = product.Price * detailDto.Quantity;
+                var detailTotalPrice = product.Price;
                 var detailTotalCost = product.Cost * detailDto.Quantity;
 
                 totalAmount += detailTotalPrice;
