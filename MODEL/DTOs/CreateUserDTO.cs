@@ -26,3 +26,12 @@ public class UserResponseDTO
     public string Message { get; set; } = null!;
     public object Data { get; set; } = null!;
 }
+public class OTPDTO
+{
+    public string? email { get; set; }
+    public string? Otp { get; set; }
+}
+public class ResendOtpRequest
+{
+    public string Email { get; set; }
+}

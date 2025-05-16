@@ -58,15 +58,15 @@ public class UserController : ControllerBase
         }
     }
     [HttpPost("verify-email")]
-    public async Task<IActionResult> VerifyEmail([FromQuery] string email, [FromQuery] string otp)
+    public async Task<IActionResult> VerifyEmail(OTPDTO otp)
     {
         try
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(otp))
+            if (string.IsNullOrEmpty(otp.email) || string.IsNullOrEmpty(otp.Otp))
             {
                 return BadRequest("Email and OTP must not be null or empty");
             }
-            var result = await _userService.VerifyEmail(email, otp);
+            var result = await _userService.VerifyEmail(otp.email, otp.Otp);
             return Ok(new ResponseModel { Message = result, Status = APIStatus.Successful });
         }
         catch (Exception ex)
@@ -103,15 +103,15 @@ public class UserController : ControllerBase
         }
     }
     [HttpPost("ResentOTP")]
-    public async Task<IActionResult> ResentOTP([FromQuery] string email)
+    public async Task<IActionResult> ResentOTP(ResendOtpRequest request)
     {
         try
         {
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(request.Email))
             {
                 return BadRequest("Email must not be null or empty");
             }
-            var result = await _userService.ResentOTP(email);
+            var result = await _userService.ResentOTP(request.Email);
             return Ok(new ResponseModel { Message = result.Message, Status = APIStatus.Successful });
         }
         catch (Exception ex)
