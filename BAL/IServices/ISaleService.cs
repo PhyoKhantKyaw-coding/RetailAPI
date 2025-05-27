@@ -11,4 +11,6 @@ namespace BAL.IServices;
 public interface ISaleService
 {
     Task<ResponseModel> AddSale(SaleDTO sale);
+    Task<List<SaleResponseDTO>> GetSales();
+    Task<List<SaleResponseDTO>> GetSalesByUserId(Guid id);
 }

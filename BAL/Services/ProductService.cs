@@ -61,6 +61,7 @@ internal class ProductService: IProductService
             ProductName = product.ProductName,
             Price = product.Price,
             Cost = product.Cost,
+            Stock =product.Stock,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             ActiveFlag = true,

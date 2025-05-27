@@ -13,3 +13,13 @@ public class SaleDetailsDTO
     public int Quantity { get; set; }
     public decimal Price { get; set; }
 }
+public class SaleDetailsResponseDTO
+{
+    public Guid SDId { get; set; }
+    public int Quantity { get; set; }
+    public String? ProductName { get; set; }
+    public string? CatName { get; set; }
+    public string? Description { get; set; }
+    public decimal TotalPrice { get; set; }
+    public decimal TotalCost { get; set; }
+}

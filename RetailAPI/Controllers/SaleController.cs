@@ -22,13 +22,13 @@ public class SaleController : ControllerBase
         _unitOfWork = unitOfWork;
         _saleService = saleService;
     }
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpGet("GetAllSales")]
     public async Task<IActionResult> GetAllSales()
     {
         try
         {
-            var sales = await _unitOfWork.Sales.GetAll();
+            var sales = await _saleService.GetSales();
             return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful, Data = sales });
         }
         catch (Exception ex)
@@ -36,7 +36,7 @@ public class SaleController : ControllerBase
             return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
         }
     }
-    [Authorize(Roles = "Admin,User")]
+   // [Authorize(Roles = "Admin,User")]
     [HttpPost("AddSale")]
     public async Task<IActionResult> AddSale([FromBody] SaleDTO sale)
     {
@@ -50,13 +50,13 @@ public class SaleController : ControllerBase
             return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
         }
     }
-    [Authorize(Roles = "User")]
+    //[Authorize(Roles = "User")]
     [HttpGet("GetSaleByUserId")]
     public async Task<IActionResult> GetSaleByUserId(Guid userId)
     {
         try
         {
-            var sales = await _unitOfWork.Sales.GetByCondition(x => x.UserId == userId);
+            var sales = await _saleService.GetSalesByUserId(userId);
             return Ok(new ResponseModel { Message = Messages.Successfully, Status = APIStatus.Successful, Data = sales });
         }
         catch (Exception ex)

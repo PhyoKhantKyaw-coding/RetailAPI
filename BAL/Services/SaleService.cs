@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BAL.Services;
 
-internal class SaleService: ISaleService
+internal class SaleService : ISaleService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IProductService _productService;
@@ -72,7 +72,7 @@ internal class SaleService: ISaleService
                     };
                 }
 
-                var detailTotalPrice = product.Price;
+                var detailTotalPrice = product.Price * detailDto.Quantity;
                 var detailTotalCost = product.Cost * detailDto.Quantity;
 
                 totalAmount += detailTotalPrice;
@@ -128,5 +128,41 @@ internal class SaleService: ISaleService
     }
 
 
+    public async Task<List<SaleResponseDTO>> GetSales()
+    {
+        var sales = await _unitOfWork.Sales.GetAll();
+        List<SaleResponseDTO> result = new List<SaleResponseDTO>();
+        foreach(var sale in sales)
+        {
+            var userData = await _unitOfWork.Users.GetById(sale.UserId);
+            result.Add(new SaleResponseDTO
+            {
+                UserName = userData.Name,
+                SaleId =sale.SaleId,
+                SaleDate = sale.SaleDate,
+                TotalAmount = sale.TotalAmount,
+                TotalCost = sale.TotalCost,
+                TotalProfit = sale.TotalProfit,
+            });
+        }
+        return result;
+    }
+    public async Task<List<SaleResponseDTO>> GetSalesByUserId(Guid userId)
+    {
+        var result = (from sale in await _unitOfWork.Sales.GetAll()
+                            join user in await  _unitOfWork.Users.GetAll()
+                            on sale.UserId equals user.UserId
+                            where sale.UserId == userId
+                            select new SaleResponseDTO
+                            {
+                                SaleId = sale.SaleId,
+                                SaleDate = sale.SaleDate,
+                                UserName = user.Name,
+                                TotalAmount = sale.TotalAmount,
+                                TotalProfit = sale.TotalProfit,
+                                TotalCost = sale.TotalCost
+                            }).ToList();
+        return result;
+    }
 
 }

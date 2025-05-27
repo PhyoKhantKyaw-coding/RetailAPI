@@ -69,7 +69,7 @@ public class ProductController : ControllerBase
 
   //  [Authorize(Roles = "Admin")]
     [HttpPatch("UpdateProduct")]
-    public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDTO product, IFormFile? imageFile)
+    public async Task<IActionResult> UpdateProduct([FromForm] UpdateProductDTO product, IFormFile? imageFile)
     {
         try
         {

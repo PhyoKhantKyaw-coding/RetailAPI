@@ -27,6 +27,7 @@ public class ServiceManager
         services.AddScoped<ISaleService, SaleService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ISaleDetailService, SaleDetailService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
     }
 }
