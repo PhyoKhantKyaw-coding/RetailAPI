@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MODEL.Entities;
 [Table("TBL_SaleDetails")]
-public class SaleDetails:Common
+public class SaleDetails
 {
     [Key]
     public Guid SDId { get; set; } = Guid.NewGuid();

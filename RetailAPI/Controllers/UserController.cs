@@ -7,7 +7,6 @@ using MODEL.DTOs;
 using REPOSITORY.UnitOfWork;
 
 namespace RetailAPI.Controllers;
-//[Authorize(Roles = "Admin,User")]
 [Produces("application/json")]
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]

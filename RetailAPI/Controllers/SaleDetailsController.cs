@@ -37,7 +37,6 @@ public class SaleDetailsController : ControllerBase
             return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
         }
     }
-    //[Authorize(Roles = "Admin")]
     [HttpGet("GetSaleDetailBySaleId")]
     public async Task<IActionResult> GetSaleDetailBySaleId(Guid saleId)
     {

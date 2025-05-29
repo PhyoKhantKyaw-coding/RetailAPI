@@ -135,7 +135,21 @@ internal class ProductService: IProductService
         _unitOfWork.Products.Update(productEntity);
         await _unitOfWork.SaveChangesAsync();
     }
-
+    public async Task DeleteProduct(Guid productId)
+    {
+        if (productId == Guid.Empty)
+        {
+            throw new ArgumentException("Product ID must not be empty", nameof(productId));
+        }
+        var productEntity = await _unitOfWork.Products.GetById(productId);
+        if (productEntity == null)
+        {
+            throw new Exception($"Product not found with ID: {productId}");
+        }
+        productEntity.ActiveFlag = false; // Soft delete
+        productEntity.UpdatedAt = DateTime.UtcNow;
+        await _unitOfWork.SaveChangesAsync();
+    }
 
 
     public async Task UpdateProduct1(UpdateProductDTO product)

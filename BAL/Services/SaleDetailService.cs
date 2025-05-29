@@ -26,7 +26,7 @@ internal class SaleDetailService : ISaleDetailService
         {
             throw new ArgumentException("Sale ID must not be empty", nameof(saleId));
         }
-        var saleDetails = await _unitOfWork.SaleDetail.GetByCondition(x => x.SaleId == saleId && x.ActiveFlag);
+        var saleDetails = await _unitOfWork.SaleDetail.GetByCondition(x => x.SaleId == saleId );
         if (saleDetails == null || !saleDetails.Any())
         {
             return new ResponseModel

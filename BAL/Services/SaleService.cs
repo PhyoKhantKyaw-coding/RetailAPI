@@ -87,9 +87,6 @@ internal class SaleService : ISaleService
                     Price = product.Price,
                     TotalPrice = detailTotalPrice,
                     TotalCost = detailTotalCost,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    ActiveFlag = true
                 });
 
                 product.Stock -= detailDto.Quantity;

@@ -22,7 +22,7 @@ public class SaleController : ControllerBase
         _unitOfWork = unitOfWork;
         _saleService = saleService;
     }
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpGet("GetAllSales")]
     public async Task<IActionResult> GetAllSales()
     {
@@ -36,7 +36,7 @@ public class SaleController : ControllerBase
             return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
         }
     }
-   // [Authorize(Roles = "Admin,User")]
+   [Authorize(Roles = "Admin,User")]
     [HttpPost("AddSale")]
     public async Task<IActionResult> AddSale([FromBody] SaleDTO sale)
     {
@@ -50,7 +50,7 @@ public class SaleController : ControllerBase
             return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
         }
     }
-    //[Authorize(Roles = "User")]
+    [Authorize(Roles = "User")]
     [HttpGet("GetSaleByUserId")]
     public async Task<IActionResult> GetSaleByUserId(Guid userId)
     {
